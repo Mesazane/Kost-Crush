@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Kost Crush: Perang Tanggal Tua</title>
+  <!-- Parodi dari 01-Candy-Crush-Game. Semua grafis = emoji + CSS, semua suara = WebAudio. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Bangers&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/audio.js" defer></script>
+  <script src="js/board.js" defer></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body class="skin-standar">
+
+  <!-- ===== JUDUL ===== -->
+  <section id="scr-title" class="screen active">
+    <div class="title-wrap">
+      <div class="float-food" aria-hidden="true"><span>🍜</span><span>🍤</span><span>☕</span><span>🥚</span><span>🍚</span><span>🍡</span></div>
+      <div class="logo">
+        <h1>KOST<br>CRUSH</h1>
+        <p class="sub">Perang Tanggal Tua</p>
+      </div>
+      <p class="tag">Parodi match-3 tentang mahasiswa semester 13 yang harus bertahan hidup sampai kiriman datang.</p>
+      <div class="name-box">
+        <label for="inp-name">Siapa namamu, Mahasiswa?</label>
+        <input id="inp-name" maxlength="14" placeholder="Budi" autocomplete="off">
+      </div>
+      <button class="btn big primary" id="btn-start">▶ MULAI</button>
+      <p class="hint">🔊 Nyalakan suara biar makin seru</p>
+    </div>
+  </section>
+
+  <!-- ===== PETA ===== -->
+  <section id="scr-map" class="screen">
+    <header class="topbar">
+      <button class="profile-chip" id="chip-profile">
+        <span class="ava">🧑‍🎓</span>
+        <span class="pc-info"><b id="tb-name"></b><small id="tb-title"></small><span class="xpbar"><i id="tb-xp"></i></span></span>
+        <span class="lvl" id="tb-lvl">1</span>
+      </button>
+      <div class="res"><span class="pill" id="tb-coins">🪙 0</span><span class="pill" id="tb-streak">🔥 0</span></div>
+    </header>
+    <nav class="menu">
+      <button data-open="shop">🏪<span>Warung</span></button>
+      <button data-open="quest">📋<span>Misi</span><i class="badge" hidden></i></button>
+      <button data-open="ach">🏅<span>Prestasi</span></button>
+      <button data-open="board">🏆<span>Peringkat</span></button>
+      <button data-open="chat">💬<span>Grup WA</span><i class="badge" hidden></i></button>
+      <button data-open="modes">🎮<span>Mode Lain</span></button>
+      <button data-open="settings">⚙️<span>Atur</span></button>
+    </nav>
+    <div class="map" id="map"></div>
+  </section>
+
+  <!-- ===== PERMAINAN ===== -->
+  <section id="scr-game" class="screen">
+    <div class="game-layout">
+      <aside class="hud hud-left">
+        <div class="card lvl-card"><small id="g-area"></small><h2 id="g-name"></h2></div>
+        <div class="hud-row">
+          <div class="card moves-card"><small id="g-moves-label">LANGKAH</small><div id="g-moves" class="big-num">0</div></div>
+          <div class="card score-card"><small>SKOR</small><div id="g-score" class="big-num">0</div>
+            <div class="starbar"><i id="g-starfill"></i><span class="st">★</span><span class="st">★</span><span class="st">★</span></div>
+          </div>
+        </div>
+        <div class="card goals-card"><small>MISI</small><div id="g-goals"></div></div>
+      </aside>
+
+      <main class="board-area">
+        <div id="boss-panel" class="boss-panel hidden">
+          <div class="boss-ava" id="boss-ava">🐀</div>
+          <div class="boss-info">
+            <b id="boss-name"></b>
+            <div class="hpbar"><i id="boss-hp"></i><span id="boss-hp-txt"></span></div>
+            <small id="boss-turn"></small>
+          </div>
+          <div class="boss-bubble" id="boss-bubble"></div>
+        </div>
+        <div class="board-wrap" id="board-wrap">
+          <div class="board" id="board"></div>
+          <div class="board-fx" id="board-fx"></div>
+          <div class="dark-overlay"></div>
+        </div>
+        <div class="item-bar" id="item-bar"></div>
+      </main>
+
+      <aside class="hud hud-right">
+        <div class="card btn-col">
+          <button class="btn" id="btn-undo">↩️ Undo 1x</button>
+          <button class="btn" id="btn-chat-game">💬 Grup WA <i class="badge" id="g-chat-badge" hidden></i></button>
+          <button class="btn" id="btn-sound">🎵 Musik</button>
+          <button class="btn danger" id="btn-exit">🏳️ Keluar</button>
+        </div>
+        <div class="card tip-card" id="g-tip"></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ===== OVERLAY ===== -->
+  <div id="callouts"></div>
+  <div id="toasts"></div>
+  <div id="event-banner" class="hidden"></div>
+
+  <div id="dialog" class="overlay hidden" data-side="left">
+    <div class="dlg-box">
+      <div class="dlg-ava" id="dlg-ava">📜</div>
+      <div class="dlg-main">
+        <span class="dlg-name" id="dlg-name"></span>
+        <p id="dlg-text"></p>
+        <small class="dlg-next">klik untuk lanjut ▼</small>
+      </div>
+      <button class="dlg-skip" id="dlg-skip">Lewati ⏭</button>
+    </div>
+  </div>
+
+  <div id="modal" class="overlay hidden"><div class="modal-box" id="modal-box"></div></div>
+  <div id="fatality" class="overlay hidden"></div>
+
+  <aside id="chat-panel" class="chat-panel">
+    <header><span>🌹</span><div><b>Kost Mawar 🌹</b><small>Joko, Siti, Bu Sri, Bu Tejo, Pak Satpam, Kucing, Mama, kamu</small></div><button id="chat-close">✕</button></header>
+    <div class="chat-list" id="chat-list"></div>
+    <div class="chat-quick" id="chat-quick"></div>
+  </aside>
+</body>
+</html>
